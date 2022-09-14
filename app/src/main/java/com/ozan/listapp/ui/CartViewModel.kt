@@ -1,13 +1,11 @@
 package com.ozan.listapp.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ozan.listapp.data.models.Cart
 import com.ozan.listapp.data.network.Status
 import com.ozan.listapp.data.network.ViewState
-import com.ozan.listapp.data.network.response.CartResponse
-import com.ozan.listapp.data.repository.CartRepository
+import com.ozan.listapp.data.repository.CartRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,32 +14,42 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
-    private val cartRepository: CartRepository
+    private val cartRepository: CartRepositoryImpl
 ) : ViewModel() {
 
-    private val _uiStateCartList = MutableStateFlow<ViewState<CartResponse>>(ViewState(Status.NONE))
-    val uiStateCartList: StateFlow<ViewState<CartResponse>> = _uiStateCartList
+    private val _uiStateCartList = MutableStateFlow<ViewState<List<Cart>>>(ViewState(Status.NONE))
+    val uiStateCartList: StateFlow<ViewState<List<Cart>>> = _uiStateCartList
 
     private val _uiStateCartDetail = MutableStateFlow<ViewState<Cart>>(ViewState(Status.NONE))
     val uiStateCartDetail: StateFlow<ViewState<Cart>> = _uiStateCartDetail
 
-    fun getCartListFlow() {
+    fun getCartList() {
         viewModelScope.launch {
             _uiStateCartList.value = ViewState(Status.LOADING)
 
-            cartRepository.getCartList()
-                .use(
-                    onSuccess = { response ->
-                        _uiStateCartList.value = ViewState(Status.SUCCESS, response)
-                    },
-                    onFailed = {
-                        _uiStateCartList.value = ViewState(Status.ERROR, error = it)
-                    }
-                )
+            cartRepository
+                .getCartList()
+                .collect {
+                    it.use(
+                        onSuccess = { response ->
+                            _uiStateCartList.value = ViewState(Status.SUCCESS, response)
+                        },
+                        onFailed = { error ->
+                            _uiStateCartList.value = ViewState(Status.ERROR, error = error)
+                        }
+                    )
+                }
+
         }
     }
 
-    fun getCartListFlow(productId: String) {
+    fun refreshCartList() {
+        viewModelScope.launch {
+            cartRepository.refreshCartList()
+        }
+    }
+
+    fun getCartDetailFlow(productId: String) {
         viewModelScope.launch {
             _uiStateCartDetail.value = ViewState(Status.LOADING)
 

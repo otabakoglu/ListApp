@@ -16,3 +16,12 @@ suspend inline fun <T : Any> Response<T>.toResult(): Result<T> =
                 )
         }
     }
+
+
+inline fun <R : Any> resultOf(block: () -> R): Result<R> {
+    return try {
+        Result.Success(block())
+    } catch (e: Exception) {
+        Result.Error(e)
+    }
+}

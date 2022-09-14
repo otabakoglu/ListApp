@@ -1,4 +1,4 @@
-package com.ozan.listapp.ui
+package com.ozan.listapp.ui.composable.detail
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,12 +34,12 @@ fun CartDetailItem(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = cart.name ?: "",
+                text = cart.name,
                 style = Typography.subtitle1
             )
 
             Text(
-                text = "${cart.price} TL",
+                text = "${cart.price} ₺",
                 style = Typography.body1
             )
 
