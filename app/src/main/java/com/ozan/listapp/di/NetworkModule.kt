@@ -26,10 +26,11 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): CartApi =
         Retrofit.Builder()
-            .baseUrl("https://s3-eu-west-1.amazonaws.com/developer-application-test/")
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CartApi::class.java)
 
+    private const val BASE_URL = "https://s3-eu-west-1.amazonaws.com/developer-application-test/"
 }

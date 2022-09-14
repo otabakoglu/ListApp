@@ -45,7 +45,11 @@ class CartViewModel @Inject constructor(
 
     fun refreshCartList() {
         viewModelScope.launch {
-            cartRepository.refreshCartList()
+            cartRepository
+                .refreshCartList()
+                .collect {
+                    _uiStateCartList.value = ViewState(Status.ERROR, error = it)
+                }
         }
     }
 

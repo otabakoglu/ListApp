@@ -1,13 +1,13 @@
 package com.ozan.listapp.ui.composable.detail
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.ozan.listapp.data.network.Status
 import com.ozan.listapp.ui.CartViewModel
+import com.ozan.listapp.ui.composable.ErrorView
 
 @Composable
 fun CartDetailScreen(
@@ -22,15 +22,11 @@ fun CartDetailScreen(
             }
         }
         Status.ERROR -> {
-            Text(
-                text = state.getErrorMessage(),
-                modifier = Modifier.padding(16.dp)
-            )
+            ErrorView(state.getErrorMessage())
         }
-        else -> {
-            Text(
-                text = "Loading",
-                modifier = Modifier.padding(16.dp)
+        else -> { // Loading
+            Spacer(
+                modifier = Modifier.fillMaxSize()
             )
         }
     }

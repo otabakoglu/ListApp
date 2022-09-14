@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CartRepository {
     suspend fun getCartList(): Flow<Result<List<Cart>>>
-    suspend fun refreshCartList()
+    suspend fun refreshCartList(): Flow<Error>
     suspend fun getCartDetail(productId: String): Result<Cart>
 }
 
