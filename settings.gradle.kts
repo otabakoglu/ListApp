@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "List App"
-include ':app'
+include(":app")
+include(":core")
+include(":basic-feature")
