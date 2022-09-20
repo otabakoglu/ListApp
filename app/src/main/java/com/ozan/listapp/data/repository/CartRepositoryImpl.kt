@@ -29,7 +29,7 @@ class CartRepositoryImpl @Inject constructor(
             }
             .onEach { cartList ->
                 if (cartList.isEmpty()) {
-                    refreshCartList()
+                    refreshCartList().collect{}
                 }
             }
             .map {
